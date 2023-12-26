@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronomètre</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin: 50px;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: inline-block;
+      align-items: center;
+      position: relative;
+      background: linear-gradient(45deg, #3498db, #3d3bb1); /* Dégradé de fond pour le cadre */
+      color: white; /* Couleur du texte */
+      padding: 40px; /* Ajout de rembourrage */
+      border-radius: 10px; /* Ajout de bord arrondi */
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Ajout d'une ombre */
+      margin: auto; /* Pour centrer le bloc horizontalement */
+    }
+      
+
+    #timer {
+      margin: 0;
+      position: absolute;
+      top: 45%;
+      left: 50%; /* Ajustez la marge gauche selon votre préférence */
+      padding: 10px 20px; /* Ajustez le rembourrage selon vos besoins */
+      font-weight: bold;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    .milliseconds-circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 200px;
+      border: 5px solid #3498db;
+      margin-left: 10%;
+      padding: 20px; /* Ajustement du rembourrage */
+      border-radius: 50%;
+      border-top: 5px solid transparent;
+      transform: rotate(0deg); /* rotation initiale */
+      animation: spin 1s linear infinite paused;
+}
+    
+
+    .playing {
+        animation-play-state: running;
+    }
+
+    @keyframes spin {
+        0% {transform: rotate(0deg);}
+        100% {transform: rotate(360deg);}
+    }
+
+    button {
+  display: inline-block;
+  position: relative;
+  margin-top: 10%;
+  margin-left: 20px; /* Ajustez la marge gauche selon votre préférence */
+  padding: 10px 20px; /* Ajustez le rembourrage selon vos besoins */
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #3498db, #3d3bb1);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease; /* Transition pour un effet visuel lors du survol */
+}
+
+button:hover {
+  background: linear-gradient(45deg, #3d3bb1, #3498db); /* Inversion des couleurs lors du survol */
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+  <h1 id="timer">00:00:00</h1>
+  <div id="milliseconds-circle" class="milliseconds-circle"></div>
+  <button onclick="startTimer()">Start</button>
+  <button onclick="stopTimer()">Stop</button>
+  <button onclick="resetTimer()">Reset</button>
+  </div>
+
+  <script>
+    let timer;
+    let milliseconds = 0;
+
+function updateTimer() {
+    const remainingMilliseconds = milliseconds % 1000;
+      const remainingSeconds = Math.floor(milliseconds / 1000) % 60;
+      const remainingMinutes = Math.floor(milliseconds / 60000) % 60;
+      const remainingHours = Math.floor(milliseconds / 3600000);
+
+      document.getElementById('timer').textContent = `${remainingHours < 10 ? '0' : ''}${remainingHours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+      milliseconds += 10; // Ajout de 1 milliseconde à chaque mise à jour
+    }
+
+
+  function startTimer() {
+      const circle = document.querySelector('.milliseconds-circle');
+
+      circle.style.animationPlayState = 'running';
+
+      timer = setInterval(updateTimer, 10); // Mise à jour toutes les 10 milliseconde
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+      const circle = document.querySelector('.milliseconds-circle');
+
+      circle.style.animationPlayState = 'paused';
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      milliseconds = 0;
+      updateTimer();
+      const circle = document.querySelector('.milliseconds-circle');
+
+      circle.style.animation = 'none';
+
+      circle.offsetHeight;
+
+      circle.style.animation = 'spin 1s linear infinite paused';
+    }
+  </script>
+</body>
+</html>
